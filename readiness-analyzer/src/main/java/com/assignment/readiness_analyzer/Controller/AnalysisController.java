@@ -13,15 +13,20 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
 
+import com.assignment.readiness_analyzer.Service.AnalysisService;
+import com.fasterxml.jackson.databind.ObjectMapper; // For converting map to string
+
 @RestController
 public class AnalysisController {
 
     private final UploadRepository uploadRepository;
     private final ReportRepository reportRepository;
+    private final AnalysisService analysisService;
 
-    public AnalysisController(UploadRepository uploadRepository, ReportRepository reportRepository) {
+    public AnalysisController(UploadRepository uploadRepository, ReportRepository reportRepository, AnalysisService analysisService) {
         this.uploadRepository = uploadRepository;
         this.reportRepository = reportRepository;
+        this.analysisService = analysisService;
     }
 
     @PostMapping(value = "/upload", consumes = "multipart/form-data")
@@ -54,7 +59,44 @@ public class AnalysisController {
 
     @PostMapping("/analyze")
     public ResponseEntity<?> analyzeUpload(@RequestBody Map<String, Object> payload) {
-        return ResponseEntity.ok().body("Milestone 3: Analysis logic will be implemented here.");
+        String uploadId = (String) payload.get("uploadId");
+        if (uploadId == null) {
+            return ResponseEntity.badRequest().body(Map.of("error", "uploadId is required."));
+        }
+
+        // 1. Get questionnaire from payload
+        @SuppressWarnings("unchecked")
+        Map<String, Boolean> questionnaire = (Map<String, Boolean>) payload.get("questionnaire");
+
+        // 2. Find the uploaded data in the database
+        return uploadRepository.findById(uploadId)
+                .map(upload -> {
+                    try {
+                        // 3. Run the analysis
+                        Map<String, Object> reportMap = analysisService.analyzeData(upload.getRawContent(), questionnaire);
+
+                        String reportId = "r_" + UUID.randomUUID().toString();
+                        reportMap.put("reportId", reportId);
+
+                        // 4. Save the report to the database
+                        Report newReport = new Report();
+                        newReport.setId(reportId);
+                        newReport.setUploadId(uploadId);
+
+                        // Convert the final report map to a JSON string to store in the DB
+                        ObjectMapper mapper = new ObjectMapper();
+                        newReport.setReportJson(mapper.writeValueAsString(reportMap));
+
+                        reportRepository.save(newReport);
+
+                        // 5. Return the full report
+                        return ResponseEntity.ok(reportMap);
+
+                    } catch (Exception e) {
+                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "Failed during analysis: " + e.getMessage()));
+                    }
+                })
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "Upload not found.")));
     }
 
     @GetMapping("/report/{reportId}")
