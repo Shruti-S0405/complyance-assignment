@@ -1,5 +1,5 @@
 package com.assignment.readiness_analyzer.Controller;
-
+import org.springframework.web.bind.annotation.CrossOrigin;
 import com.assignment.readiness_analyzer.Report;
 import com.assignment.readiness_analyzer.Upload;
 import com.assignment.readiness_analyzer.Repository.ReportRepository;
@@ -8,14 +8,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
-
 import com.assignment.readiness_analyzer.Service.AnalysisService;
 import com.fasterxml.jackson.databind.ObjectMapper; // For converting map to string
+import org.springframework.web.bind.annotation.RestController;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class AnalysisController {
 
