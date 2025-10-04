@@ -9,11 +9,12 @@ interface ContextStepProps {
 
 export function ContextStep({ onNext }: ContextStepProps) {
   return (
-    <Card className="p-12 text-center">
-      <h1 className="text-4xl font-bold text-gray-900 mb-6 text-balance">E-Invoicing Readiness & Gap Analyzer</h1>
-      <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8 leading-relaxed">
-        This tool helps organizations quickly assess their invoice data against technical standards. Upload a sample of
-        your invoices to receive a readiness score and a prioritized list of gaps to address.
+    <Card className="p-12 flex flex-col items-center justify-center text-center space-y-4">
+      <h1 className="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight">ComplySense</h1>
+      <h2 className="text-lg md:text-2xl font-medium text-gray-700">E‑Invoicing Readiness & Gap Analyzer</h2>
+      <p className="text-base md:text-lg text-gray-600 max-w-2xl leading-relaxed">
+        ComplySense helps organizations assess and improve their E‑Invoicing compliance.
+        Upload CSV or JSON files, run automated checks, and share structured reports instantly.
       </p>
       <Button onClick={onNext} size="lg" className="bg-blue-600 hover:bg-blue-700">
         Start Analysis

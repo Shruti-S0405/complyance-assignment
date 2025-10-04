@@ -3,10 +3,11 @@ import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
+import { META_TITLE, META_DESCRIPTION } from '@/lib/siteConfig'
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
+  title: META_TITLE,
+  description: META_DESCRIPTION,
   generator: 'v0.app',
 }
 
