@@ -15,7 +15,6 @@ interface AnalysisStepProps {
 }
 
 export function AnalysisStep({ onBack, onAnalyzeAgain, report }: AnalysisStepProps) {
-  // Normalize different backend shapes into the UI-friendly shape
   const overallScore =
     report?.overallScore ?? report?.overall_score ?? report?.scores?.overall ?? 0
 
@@ -64,7 +63,6 @@ export function AnalysisStep({ onBack, onAnalyzeAgain, report }: AnalysisStepPro
     const base = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080"
     if (reportId) {
       const url = `${base}/report/${encodeURIComponent(reportId)}`
-      // Try modern clipboard API, fallback to textarea + execCommand
       if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
         navigator.clipboard
           .writeText(url)

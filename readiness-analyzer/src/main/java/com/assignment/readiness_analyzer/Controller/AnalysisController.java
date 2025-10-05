@@ -15,7 +15,7 @@ import com.assignment.readiness_analyzer.Service.AnalysisService;
 import com.fasterxml.jackson.databind.ObjectMapper; // For converting map to string
 import org.springframework.web.bind.annotation.RestController;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "https://readiness-analyzer-hpe0r8by3-shrutis0405work-9205s-projects.vercel.app/")
 @RestController
 public class AnalysisController {
 
